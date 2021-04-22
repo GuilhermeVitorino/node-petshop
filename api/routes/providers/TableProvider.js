@@ -6,7 +6,7 @@ module.exports = {
     return Model.findAll()
   },
 
-  async findById(id) {
+  async findById (id) {
     const provider = await Model.findOne({
         where: {
           id: id
@@ -20,7 +20,7 @@ module.exports = {
     return provider
   },
 
-  insert(provider) {
+  insert (provider) {
     return Model.create(provider)
   },
 
@@ -31,5 +31,12 @@ module.exports = {
         where: {id: id}
       }
     )
+  },
+
+  remove (id) {
+    return Model.destroy({
+      where: { id: id }
+    })
   }
+  
 }

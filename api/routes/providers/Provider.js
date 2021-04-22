@@ -2,7 +2,8 @@ const TableProvider = require('./TableProvider')
 
 class Provider {
 
-  constructor ({id, company, email, category, createdAt, updatedAt, version}){
+  constructor ({id, company, email, category, createdAt, updatedAt, version}) {
+
     this.id = id
     this.company = company
     this.email = email
@@ -10,10 +11,11 @@ class Provider {
     this.createdAt = createdAt
     this.updatedAt = updatedAt
     this.version = version
+
   }
 
-  async create(){
-
+  async create () {
+    this.validate()
     const result = await TableProvider.insert({
       company: this.company,
       email: this.email,
@@ -24,9 +26,11 @@ class Provider {
     this.createdAt = result.createdAt
     this.updatedAt = result.updatedAt
     this.version = result.version
+
   }
 
-  async findById(){
+  async findById () {
+
     const provider  = await TableProvider.findById(this.id)
     this.company = provider.company
     this.email = provider.email
@@ -34,6 +38,7 @@ class Provider {
     this.createdAt = provider.createdAt
     this.updatedAt = provider.updatedAt
     this.version = provider.version
+
   }
 
   async update(){
@@ -61,6 +66,27 @@ class Provider {
     await TableProvider.update(this.id, dataToUpdate)
 
   }
+
+  async remove () {
+    return TableProvider.remove(this.id)
+  }
+
+  validate () {
+    
+    const fields = ['company', 'email', 'category']
+
+    fields.forEach(field => {
+
+      const value = this[field]
+
+      if (typeof value !== 'string' && value.length > 0) {
+        throw new Error(`The field ${field} is not valid`)
+      }
+
+    })
+
+  }
+
 }
 
 module.exports = Provider
