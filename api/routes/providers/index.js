@@ -4,6 +4,7 @@ const Provider = require('./Provider')
 
 router.get('/', async (req, res) => {
   const results = await TableProvider.list()
+  res.status(200)
   res.json(results)
 })
 
@@ -14,12 +15,16 @@ router.get('/:id', async (req, res) => {
     const id = req.params.id
     const provider = new Provider({ id: id })
     await provider.findById()
+    res.status(200)
     res.json(provider)
 
   } catch (error) {
+
+    res.status(404)
     res.json({
       message: error.message
     })
+
   }
 
 })
@@ -31,10 +36,12 @@ router.post('/', async (req, res) => {
     const data = req.body
     const provider = new Provider(data)
     await provider.create()
+    res.status(201)
     res.json(provider)
 
   } catch (error) {
 
+    res.status(400)
     res.json({
       message: error.message
     })
@@ -55,6 +62,7 @@ router.put('/:id', async (req, res) => {
     const provider = new Provider(data)
 
     await provider.update()
+    res.status(204)
     res.end()
 
   } catch (error) {
@@ -75,10 +83,12 @@ router.delete('/:id', async (req, res) => {
     const provider = new Provider({ id: id })
     await provider.findById()
     await provider.remove()
+    res.status(204)
     res.end()
 
   } catch (error) {
 
+    res.status(404)
     res.json({
       message: error.message
     })
