@@ -1,3 +1,5 @@
+const InvalidField = require('../../erros/InvalidField')
+const NoData = require('../../erros/NoData')
 const TableProvider = require('./TableProvider')
 
 class Provider {
@@ -60,7 +62,7 @@ class Provider {
     })
 
     if (Object.keys(dataToUpdate).length === 0) {
-      throw new Error('No data was received to update!')
+      throw new NoData()
     }
 
     await TableProvider.update(this.id, dataToUpdate)
@@ -79,8 +81,8 @@ class Provider {
 
       const value = this[field]
 
-      if (typeof value !== 'string' && value.length > 0) {
-        throw new Error(`The field ${field} is not valid`)
+      if (typeof value !== 'string' || value.length === 0) {
+        throw new InvalidField(field)
       }
 
     })
