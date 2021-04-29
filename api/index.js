@@ -6,6 +6,7 @@ const router = require('./routes/providers')
 const NotFound = require('./erros/NotFound')
 const InvalidField = require('./erros/InvalidField')
 const NoData = require('./erros/NoData')
+const UnsupportedValue = require('./erros/UnsupportedValue')
 
 app.use(bodyParser.json())
 
@@ -21,6 +22,10 @@ app.use((error, req, res, next) => {
   
   if (error instanceof InvalidField || error instanceof NoData) {
     status = 400
+  }
+
+  if (error instanceof UnsupportedValue) {
+    status = 406
   }
 
   res.status(status)
