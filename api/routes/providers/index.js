@@ -1,11 +1,13 @@
 const router = require('express').Router()
 const TableProvider = require('./TableProvider')
 const Provider = require('./Provider')
+const ProviderSerializer = require('../../Serializer').ProviderSerializer
 
 router.get('/', async (req, res) => {
   const results = await TableProvider.list()
   res.status(200)
-  res.json(results)
+  const serializer = new ProviderSerializer(res.getHeader('Content-Type'))  
+  res.send(serializer.serialize(results))
 })
 
 router.get('/:id', async (req, res, next) => {
@@ -16,7 +18,8 @@ router.get('/:id', async (req, res, next) => {
     const provider = new Provider({ id: id })
     await provider.findById()
     res.status(200)
-    res.json(provider)
+    const serializer = new ProviderSerializer(res.getHeader('Content-Type')) 
+    res.send(serializer.serialize(provider))
 
   } catch (error) {
 
@@ -34,7 +37,8 @@ router.post('/', async (req, res, next) => {
     const provider = new Provider(data)
     await provider.create()
     res.status(201)
-    res.json(provider)
+    const serializer = new ProviderSerializer(res.getHeader('Content-Type'))  
+    res.send(serializer.serialize(provider))
 
   } catch (error) {
 

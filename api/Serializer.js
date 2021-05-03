@@ -16,7 +16,17 @@ class Serializer {
 
 }
 
+class ProviderSerializer extends Serializer {
+  constructor ( contentType ) {
+    super()
+    this.contentType = contentType
+  }
+}
+
+
+
 module.exports = {
   Serializer : Serializer,
+  ProviderSerializer: ProviderSerializer,
   acceptedFormats: ['application/json']
 }
