@@ -4,7 +4,7 @@ const Model = require('./ModelTableProvider')
 module.exports = {
 
   list() {
-    return Model.findAll()
+    return Model.findAll({ raw: true })
   },
 
   async findById (id) {

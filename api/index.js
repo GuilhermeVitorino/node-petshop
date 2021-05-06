@@ -8,6 +8,7 @@ const InvalidField = require('./erros/InvalidField')
 const NoData = require('./erros/NoData')
 const UnsupportedValue = require('./erros/UnsupportedValue')
 const acceptedFormats = require('./Serializer').acceptedFormats
+const ErrorSerializer = require('./Serializer').ErrorSerializer
 
 app.use(bodyParser.json())
 
@@ -48,11 +49,17 @@ app.use((error, req, res, next) => {
     status = 406
   }
 
+  const errorSerializer = new ErrorSerializer(
+    res.getHeader('Content-Type')
+  )
+
   res.status(status)
-  res.json({
-    message: error.message,
-    id: error.idError
-  })
+  res.send(
+    errorSerializer.serialize({
+      message: error.message,
+      id: error.idError
+    })
+  )
   
 })
 
